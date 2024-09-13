@@ -1,11 +1,18 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(const MyApp());
 
+const String KEY_IS_CLICKED = 'is_clicked';
+const String KEY_COUNTER = 'counter';
+const String KEY_MESS = 'mess';
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  // This widget is the root of the application.
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
@@ -31,24 +38,33 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _loadCounter();
+
   }
 
-  /// Load the initial counter value from persistent storage on start,
-  /// or fallback to 0 if it doesn't exist.
-  Future<void> _loadCounter() async {
-    final prefs = await SharedPreferences.getInstance();
+  //Loading counter value on start
+  _loadCounter() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      _counter = prefs.getInt('counter') ?? 0;
+      _counter = (prefs.getInt(KEY_COUNTER) ?? 0);
     });
+
+    bool isClicked = prefs.getBool(KEY_IS_CLICKED) ?? false;
+    if (isClicked) {
+      String mess = prefs.getString(KEY_MESS) ?? '';
+
+      print(mess);
+    }
   }
 
-  /// After a click, increment the counter state and
-  /// asynchronously save it to persistent storage.
+  //Incrementing counter after click
   Future<void> _incrementCounter() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _counter = (prefs.getInt('counter') ?? 0) + 1;
-      prefs.setInt('counter', _counter);
+      _counter = (prefs.getInt(KEY_COUNTER) ?? 0) + 1;//lay du lieu ra
+      prefs.setInt(KEY_COUNTER, _counter);//luu du lieu vao
+
+      prefs.setBool(KEY_IS_CLICKED, true);
+      prefs.setString(KEY_MESS, 'Nut da duoc bam it nhat 1 lan');
     });
   }
 
@@ -63,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              'You have pushed the button this many times: ',
+              'You have pushed the button this many times:',
             ),
             Text(
               '$_counter',
@@ -76,7 +92,8 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: _incrementCounter,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
-      ),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
+//style: Theme.of(context).textTheme.headlineMedium,
