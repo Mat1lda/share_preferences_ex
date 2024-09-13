@@ -45,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _loadCounter() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      _counter = (prefs.getInt(KEY_COUNTER) ?? 0);//xu ly null, neu null thi gia tri = 0
+      _counter = (prefs.getInt(KEY_COUNTER) ?? 0);//xu ly null, neu null thi gia tri = 00
     });
 
     bool isClicked = prefs.getBool(KEY_IS_CLICKED) ?? false;
